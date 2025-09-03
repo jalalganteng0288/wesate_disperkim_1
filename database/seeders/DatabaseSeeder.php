@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesAndPermissionsSeeder::class,
             PengaduanSeeder::class,
+            InfrastructureReportSeeder::class, // <-- TAMBAHKAN BARIS INI
         ]);
 
         User::factory()->create([

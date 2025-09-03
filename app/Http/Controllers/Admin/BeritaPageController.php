@@ -5,16 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use Illuminate\Http\Request;
-
-// PASTIKAN ANDA MENGGUNAKAN 'use' STATEMENT YANG BENAR INI
+use Illuminate\Support\Facades\Auth; // <-- PENTING: Gunakan facade Auth
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class BeritaPageController extends Controller
 {
     /**
-     * Menampilkan halaman daftar semua berita.
+     * Menampilkan halaman daftar berita.
      */
     public function index()
     {
@@ -35,101 +33,82 @@ class BeritaPageController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validasi
-        $validatedData = $request->validate([
+        $request->validate([
             'judul' => 'required|string|max:255|unique:beritas,judul',
             'konten' => 'required|string',
-            'status' => 'required|in:draft,published',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        // 2. Tambahkan data tambahan
-        $validatedData['user_id'] = Auth::id();
-        $validatedData['slug'] = Str::slug($request->judul); // Membuat slug dari judul
-
-        // 3. Set tanggal publikasi jika statusnya 'published'
-        if ($request->status === 'published') {
-            $validatedData['published_at'] = Carbon::now();
-        } else {
-            $validatedData['published_at'] = null; // Pastikan null jika statusnya draft
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('berita_images', 'public');
         }
 
-        // 4. Simpan ke database
-        Berita::create($validatedData);
+        Berita::create([
+            'user_id' => Auth::id(), // <-- PERBAIKAN: Menggunakan Auth::id()
+            'judul' => $request->judul,
+            'slug' => Str::slug($request->judul),
+            'konten' => $request->konten,
+            'image_path' => $imagePath,
+            'status' => 'published', // Langsung publish
+            'published_at' => now(),
+        ]);
 
-        // 5. Redirect dengan pesan sukses
-        return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil disimpan.');
+        return redirect()->route('admin.berita.index')
+                         ->with('success', 'Berita berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Berita  $berita
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Berita $berita)
-    {
-        // Nanti kita bisa buat halaman untuk melihat berita
-        return redirect()->route('admin.berita.index');
-    }
 
     /**
      * Menampilkan form untuk mengedit berita.
-     *
-     * @param  \App\Models\Berita  $berita
-     * @return \Illuminate\Http\Response
      */
-    public function edit(Berita $berita)
+    public function edit(Berita $beritum)
     {
-        // Nanti kita akan buat ini
-        return redirect()->route('admin.berita.index');
+        return view('admin.berita.edit', ['berita' => $beritum]);
     }
 
     /**
-     * Mengupdate berita di database.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Berita  $berita
-     * @return \Illuminate\Http\Response
+     * Memperbarui data berita di database.
      */
-    public function update(Request $request, Berita $berita)
+    public function update(Request $request, Berita $beritum)
     {
-         // 1. Validasi
-        $validatedData = $request->validate([
-            // Judul harus unik, kecuali untuk berita ini sendiri
-            'judul' => 'required|string|max:255|unique:beritas,judul,' . $berita->id,
+        $request->validate([
+            'judul' => 'required|string|max:255|unique:beritas,judul,' . $beritum->id,
             'konten' => 'required|string',
-            'status' => 'required|in:draft,published',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        // 2. Update data tambahan
-        $validatedData['slug'] = Str::slug($request->judul);
-
-        // 3. Atur tanggal publikasi
-        // Jika status diubah menjadi 'published' dan belum pernah ada tanggal publikasi
-        if ($request->status === 'published' && is_null($berita->published_at)) {
-            $validatedData['published_at'] = Carbon::now();
-        } 
-        // Jika status diubah kembali ke 'draft'
-        elseif ($request->status === 'draft') {
-            $validatedData['published_at'] = null;
+        $imagePath = $beritum->image_path;
+        if ($request->hasFile('image')) {
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
+            $imagePath = $request->file('image')->store('berita_images', 'public');
         }
 
-        // 4. Update data di database
-        $berita->update($validatedData);
+        $beritum->update([
+            'judul' => $request->judul,
+            'slug' => Str::slug($request->judul),
+            'konten' => $request->konten,
+            'image_path' => $imagePath,
+        ]);
 
-        // 5. Redirect dengan pesan sukses
-        return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil diperbarui.');// Nanti kita akan buat ini
+        return redirect()->route('admin.berita.index')
+                         ->with('success', 'Berita berhasil diperbarui.');
     }
 
     /**
      * Menghapus berita dari database.
-     *
-     * @param  \App\Models\Berita  $berita
-     * @return \Illuminate\Http\Response
      */
-    public function destroy(Berita $berita)
+    public function destroy(Berita $beritum)
     {
-        $berita->delete();
-        return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil dihapus.');
+        if ($beritum->image_path) {
+            Storage::disk('public')->delete($beritum->image_path);
+        }
+
+        $beritum->delete();
+
+        return redirect()->route('admin.berita.index')
+                         ->with('success', 'Berita berhasil dihapus.');
     }
 }

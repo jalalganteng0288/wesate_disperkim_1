@@ -1,52 +1,37 @@
 <x-app-layout>
-<div class="container-fluid">
-<h1>Edit Berita</h1>
-
-    <div class="card mt-4 shadow">
-        <div class="card-body">
-            <form action="{{ route('admin.berita.update', $berita->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-
-                <div class="mb-3">
-                    <label for="judul" class="form-label">Judul Berita</label>
-                    <input type="text" class="form-control @error('judul') is-invalid @enderror" id="judul" name="judul" value="{{ old('judul', $berita->judul) }}" required>
-                    @error('judul')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="konten" class="form-label">Konten</label>
-                    <textarea class="form-control @error('konten') is-invalid @enderror" id="konten" name="konten" rows="15">{{ old('konten', $berita->konten) }}</textarea>
-                    @error('konten')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                
-                <div class="mb-3">
-                    <label for="status" class="form-label">Status</label>
-                    <select class="form-select" id="status" name="status">
-                        <option value="draft" {{ old('status', $berita->status) == 'draft' ? 'selected' : '' }}>Draft</option>
-                        <option value="published" {{ old('status', $berita->status) == 'published' ? 'selected' : '' }}>Publish</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                <a href="{{ route('admin.berita.index') }}" class="btn btn-secondary">Batal</a>
-            </form>
-        </div>
-    </div>
-</div>
-
-@push('scripts')
+    {{-- Script untuk TinyMCE --}}
+    @push('scripts')
+    <script src="https://cdn.tiny.cloud/1/xfo1mgzbpdozo1ofx8w550fcyv3s2q5d4wwn23igp4fuszse/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         tinymce.init({
-            selector: 'textarea#konten',
-            plugins: 'code table lists image link',
-            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table | image | link'
+            selector: 'textarea#content-editor',
+            plugins: 'code table lists image link fullscreen',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table | image link | fullscreen'
         });
     </script>
-@endpush
+    @endpush
 
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Edit Berita') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <form action="{{ route('admin.berita.update', $berita->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        @include('admin.berita.form-fields')
+                        <div class="flex items-center justify-end mt-4">
+                            <a href="{{ route('admin.berita.index') }}" class="text-sm text-gray-600 hover:text-gray-900 mr-4">Batal</a>
+                            <x-primary-button>{{ __('Update Berita') }}</x-primary-button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-app-layout>

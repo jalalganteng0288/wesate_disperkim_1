@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany; // <-- TAMBAHKAN INI
 
 class Complaint extends Model
 {
-   use HasFactory, SoftDeletes; // <-- TAMBAHKAN SoftDeletes
+    use HasFactory, SoftDeletes; // <-- TAMBAHKAN SoftDeletes
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +22,7 @@ class Complaint extends Model
         'user_id',
         'title',
         'description',
+        'housing_unit_id',
         'photo_url',
         'latitude',
         'longitude',
@@ -36,9 +37,13 @@ class Complaint extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    } 
+    }
     public function complaintHistories(): HasMany
     {
         return $this->hasMany(ComplaintHistory::class);
-    }//
+    } //
+    public function housingUnit(): BelongsTo
+    {
+        return $this->belongsTo(HousingUnit::class);
+    }
 }

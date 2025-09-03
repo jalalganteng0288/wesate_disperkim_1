@@ -3,11 +3,18 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 
-// Import semua Controller Admin kita
+// Import semua Controller Admin kita agar lebih rapi
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserPageController;
 use App\Http\Controllers\Admin\PengaduanPageController;
 use App\Http\Controllers\Admin\BeritaPageController;
+use App\Http\Controllers\Admin\InfrastructureReportPageController;
+use App\Http\Controllers\Admin\HousingUnitPageController;
+use App\Http\Controllers\Admin\AnnouncementPageController;
+use App\Http\Controllers\Admin\MediaPageController;
+use App\Http\Controllers\Admin\MapController;
+use App\Http\Controllers\Admin\WorkOrderPageController; // <-- Tambahkan ini
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,14 +38,36 @@ Route::get('/dashboard', function () {
 // == GRUP ROUTE UNTUK SEMUA HALAMAN ADMIN PANEL ==
 // =====================================================================
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
-    
+
     // Route untuk halaman utama admin /admin/dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Route untuk semua fungsi CRUD (index, create, store, edit, update, destroy)
     Route::resource('users', UserPageController::class);
+
     Route::resource('pengaduan', PengaduanPageController::class);
+    Route::patch('pengaduan/{pengaduan}/status', [PengaduanPageController::class, 'updateStatus'])->name('pengaduan.updateStatus');
+
     Route::resource('berita', BeritaPageController::class);
+
+    Route::resource('infrastruktur', InfrastructureReportPageController::class)->only(['index', 'show']);
+    Route::patch('infrastruktur/{infrastructureReport}/status', [InfrastructureReportPageController::class, 'updateStatus'])->name('infrastruktur.updateStatus');
+
+    Route::resource('perumahan', HousingUnitPageController::class);
+
+    Route::resource('pengumuman', AnnouncementPageController::class);
+
+    Route::get('media', [MediaPageController::class, 'index'])->name('media.index');
+    Route::post('media', [MediaPageController::class, 'store'])->name('media.store');
+    Route::delete('media/{media}', [MediaPageController::class, 'destroy'])->name('media.destroy');
+
+    Route::get('peta', [MapController::class, 'index'])->name('map.index');
+    Route::get('peta/lokasi', [MapController::class, 'locations'])->name('map.locations');
+
+    Route::resource('penugasan', WorkOrderPageController::class);
+    Route::get('reports/complaints/pdf', [App\Http\Controllers\Admin\ReportController::class, 'exportComplaintsPDF'])->name('reports.complaints.pdf');
+    Route::get('reports/complaints/csv', [App\Http\Controllers\Admin\ReportController::class, 'exportComplaintsCSV'])->name('reports.complaints.csv');
+    Route::post('penugasan/{penugasan}/notify', [WorkOrderPageController::class, 'sendNotification'])->name('penugasan.notify');
 
 });
 // =====================================================================
@@ -53,5 +82,4 @@ Route::middleware('auth')->group(function () {
 
 
 // Baris ini memuat semua route untuk otentikasi (login, register, logout, dll.)
-require __DIR__.'/auth.php';
-
+require __DIR__ . '/auth.php';

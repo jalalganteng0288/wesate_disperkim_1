@@ -18,7 +18,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- CSS Kustom Anda -->
-    <link rel="stylesheet" href="{{ asset('css/admin_style.css') }}">
+    <link rel="stylesheet" href="{{ asset('resources/css/admin_style.css') }}">
 </head>
 
 <body class="font-sans antialiased">

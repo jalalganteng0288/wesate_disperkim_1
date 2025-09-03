@@ -17,6 +17,7 @@ class Pengaduan extends Model
      */
     protected $fillable = [
         'user_id',
+        'housing_unit_id', // <-- Pastikan ini ada
         'judul',
         'isi_laporan',
         'status',
@@ -29,5 +30,15 @@ class Pengaduan extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * === INI PERBAIKANNYA ===
+     * Mendefinisikan relasi "belongsTo" ke model HousingUnit.
+     * Setiap pengaduan bisa jadi dimiliki oleh satu perumahan.
+     */
+    public function housingUnit(): BelongsTo
+    {
+        return $this->belongsTo(HousingUnit::class);
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany; // <-- TAMBAHKAN INI
+
 
 class HousingUnit extends Model
 {
@@ -18,5 +20,9 @@ class HousingUnit extends Model
         'photo_gallery',
         'latitude',
         'longitude',
-    ]; //
+    ];
+    public function complaints(): HasMany
+    {
+        return $this->hasMany(Complaint::class);
+    } //
 }
