@@ -50,7 +50,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     Route::resource('berita', BeritaPageController::class);
 
-    Route::resource('infrastruktur', InfrastructureReportPageController::class)->only(['index', 'show']);
+    Route::resource('infrastruktur', InfrastructureReportPageController::class)
+        ->parameters(['infrastruktur' => 'infrastructureReport']) // <-- TAMBAHKAN BARIS INI
+        ->only(['index', 'show']);
+
     Route::patch('infrastruktur/{infrastructureReport}/status', [InfrastructureReportPageController::class, 'updateStatus'])->name('infrastruktur.updateStatus');
 
     Route::resource('perumahan', HousingUnitPageController::class);
@@ -68,7 +71,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('reports/complaints/pdf', [App\Http\Controllers\Admin\ReportController::class, 'exportComplaintsPDF'])->name('reports.complaints.pdf');
     Route::get('reports/complaints/csv', [App\Http\Controllers\Admin\ReportController::class, 'exportComplaintsCSV'])->name('reports.complaints.csv');
     Route::post('penugasan/{penugasan}/notify', [WorkOrderPageController::class, 'sendNotification'])->name('penugasan.notify');
-
 });
 // =====================================================================
 

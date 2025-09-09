@@ -62,7 +62,7 @@ class PengaduanPageController extends Controller
     {
         $validatedData = $request->validate([
             'judul' => 'required|string|max:255',
-            'isi' => 'required|string',
+            'isi_laporan' => 'required|string',
             'housing_unit_id' => 'nullable|exists:housing_units,id', // Validasi housing_unit_id
         ]);
 
@@ -101,7 +101,7 @@ class PengaduanPageController extends Controller
     {
         $validatedData = $request->validate([
             'judul' => 'required|string|max:255',
-            'isi' => 'required|string',
+            'isi_laporan' => 'required|string',
             'housing_unit_id' => 'nullable|exists:housing_units,id', // Validasi housing_unit_id
         ]);
 

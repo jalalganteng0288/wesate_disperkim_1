@@ -14,11 +14,11 @@
 </div>
 
 <div class="mt-4">
-    <x-input-label for="pengaduan_id" :value="__('Terkait Pengaduan')" />
-    <select name="pengaduan_id" id="pengaduan_id" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
+    <x-input-label for="complaint_id" :value="__('Terkait Pengaduan')" />
+    <select name="complaint_id" id="complaint_id" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
         <option value="">-- Pilih Pengaduan --</option>
         @foreach ($pengaduans as $pengaduan)
-            <option value="{{ $pengaduan->id }}" @selected(old('pengaduan_id', $penugasan->pengaduan_id ?? '') == $pengaduan->id)>
+            <option value="{{ $pengaduan->id }}" @selected(old('complaint_id', $penugasan->complaint_id ?? '') == $pengaduan->id)>
                 {{ Str::limit($pengaduan->judul, 80) }}
             </option>
         @endforeach

@@ -6,14 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('work_orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('complaint_id')->constrained()->onDelete('cascade');
+            $table->foreignId('complaint_id'); // <-- DIUBAH: Hanya membuat kolom, tanpa relasi
             $table->foreignId('assignee_id')->constrained('users')->onDelete('cascade');
             $table->string('title');
             $table->text('description')->nullable();
@@ -24,9 +21,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('work_orders');

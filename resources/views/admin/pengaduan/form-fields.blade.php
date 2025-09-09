@@ -28,7 +28,7 @@
 </div>
 
 <div class="mt-4">
-    <x-input-label for="isi" :value="__('Isi Laporan Lengkap')" />
-    <textarea id="isi" name="isi" rows="6" class="block mt-1 w-full rounded-md shadow-sm border-gray-300" placeholder="Jelaskan detail masalah di sini...">{{ old('isi', $pengaduan->isi ?? '') }}</textarea>
+    <x-input-label for="isi_laporan" :value="__('Isi Laporan Lengkap')" />
+    <textarea id="isi_laporan" name="isi_laporan" rows="6" class="block mt-1 w-full rounded-md shadow-sm border-gray-300" placeholder="Jelaskan detail masalah di sini...">{{ old('isi', $pengaduan->isi ?? '') }}</textarea>
     <p class="mt-1 text-sm text-gray-500">Jelaskan masalah secara rinci, termasuk lokasi spesifik (nama jalan, blok, nomor rumah jika ada).</p>
 </div>

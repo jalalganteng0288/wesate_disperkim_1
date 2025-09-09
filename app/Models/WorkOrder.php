@@ -29,4 +29,9 @@ class WorkOrder extends Model
     {
         return $this->belongsTo(User::class, 'assignee_id');
     }
+    public function pengaduan(): BelongsTo
+    {
+        // Relasi ke model Pengaduan, menggunakan foreign key 'complaint_id'
+        return $this->belongsTo(Pengaduan::class, 'complaint_id');
+    }
 }

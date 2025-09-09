@@ -31,7 +31,7 @@ class WorkOrderPageController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'pengaduan_id' => 'required|exists:pengaduans,id',
+            'complaint_id' => 'required|exists:pengaduans,id',
             'assignee_id' => 'required|exists:users,id',
             'status' => 'required|in:Pending,In Progress,Completed,Cancelled',
             'due_date' => 'nullable|date',
@@ -62,7 +62,7 @@ class WorkOrderPageController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'pengaduan_id' => 'required|exists:pengaduans,id',
+            'complaint_id' => 'required|exists:pengaduans,id',
             'assignee_id' => 'required|exists:users,id',
             'status' => 'required|in:Pending,In Progress,Completed,Cancelled',
             'due_date' => 'nullable|date',

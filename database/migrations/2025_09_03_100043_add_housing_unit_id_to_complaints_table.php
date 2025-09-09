@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('complaints', function (Blueprint $table) {
+        Schema::table('pengaduans', function (Blueprint $table) {
             // Menambahkan kolom foreign key baru setelah kolom 'user_id'
             // Kolom ini bisa NULL, karena mungkin ada pengaduan yang tidak terkait perumahan
             $table->foreignId('housing_unit_id')->nullable()->after('user_id')->constrained()->onDelete('set null');
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('complaints', function (Blueprint $table) {
+        Schema::table('pengaduans', function (Blueprint $table) {
             //
         });
     }
