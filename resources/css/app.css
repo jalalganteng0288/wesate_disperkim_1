@@ -1,3 +1,5 @@
+@import 'admin_style.css'; /* <-- TAMBAHKAN BARIS INI DI ATAS */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

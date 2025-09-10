@@ -61,6 +61,48 @@ body {
     border-left-color: var(--secondary-blue);
 }
 
+/* resources/css/admin_style.css */
+
+/* ... (style lain yang sudah ada) ... */
+
+
+/* ======================================= */
+/* === PERBAIKAN TAMPILAN SIDEBAR MENU === */
+/* ======================================= */
+
+.sidebar .nav-link {
+    color: #334155;
+    /* Warna teks abu-abu gelap agar lebih mudah dibaca */
+    font-weight: 500;
+    /* Sedikit lebih tebal */
+    padding: 0.75rem 1.5rem;
+    margin-bottom: 0.25rem;
+    /* Memberi sedikit jarak antar menu */
+    border-left: 3px solid transparent;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/* Style saat kursor mouse di atas menu (hover) */
+.sidebar .nav-link:hover {
+    background-color: #f1f5f9;
+    /* Latar abu-abu sangat terang */
+    color: #0f172a;
+    /* Warna teks hitam saat hover */
+    border-left-color: #94a3b8;
+}
+
+/* Style untuk menu yang sedang aktif */
+.sidebar .nav-link.active {
+    background-color: #e0e7ff;
+    /* Latar biru muda */
+    color: #3730a3;
+    /* Warna teks biru tua */
+    font-weight: 600;
+    /* Lebih tebal untuk menu aktif */
+    border-left-color: #4f46e5;
+    /* Garis indikator biru */
+}
+
 /* ==================
    KONTEN UTAMA
    ================== */
@@ -129,86 +171,111 @@ body {
 /* --- PENGATURAN PAGE STYLING (MODERN & DIGITAL) --- */
 .settings-container {
     display: flex;
-    gap: 2.5rem; /* Menambah jarak antar sidebar dan konten */
+    gap: 2.5rem;
+    /* Menambah jarak antar sidebar dan konten */
 }
 
 .settings-nav {
-    flex: 0 0 240px; /* Lebar menu navigasi sedikit lebih lebar */
-    background-color: #ffffff; /* Latar putih untuk nav */
-    border-radius: 0.75rem; /* Sudut melengkung */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05); /* Shadow lembut */
-    padding: 1rem 0; /* Padding vertikal */
+    flex: 0 0 240px;
+    /* Lebar menu navigasi sedikit lebih lebar */
+    background-color: #ffffff;
+    /* Latar putih untuk nav */
+    border-radius: 0.75rem;
+    /* Sudut melengkung */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    /* Shadow lembut */
+    padding: 1rem 0;
+    /* Padding vertikal */
 }
 
 .settings-nav .nav-link {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.85rem 1.5rem; /* Padding lebih besar */
-    color: #4a5568; /* Warna teks abu-abu tua */
+    padding: 0.85rem 1.5rem;
+    /* Padding lebih besar */
+    color: #4a5568;
+    /* Warna teks abu-abu tua */
     font-weight: 500;
     text-decoration: none;
     transition: background-color 0.2s, color 0.2s;
-    border-left: 3px solid transparent; /* Garis indikator aktif */
+    border-left: 3px solid transparent;
+    /* Garis indikator aktif */
 }
 
 .settings-nav .nav-link i {
     width: 20px;
     text-align: center;
-    color: #718096; /* Warna ikon default */
+    color: #718096;
+    /* Warna ikon default */
 }
 
 .settings-nav .nav-link:hover {
-    background-color: #f7fafc; /* Latar abu-abu sangat muda saat hover */
-    color: #2d3748; /* Warna teks lebih gelap saat hover */
+    background-color: #f7fafc;
+    /* Latar abu-abu sangat muda saat hover */
+    color: #2d3748;
+    /* Warna teks lebih gelap saat hover */
 }
 
 .settings-nav .nav-link.active {
-    background-color: #ebf4ff; /* Latar biru muda untuk item aktif */
-    color: #2b6cb0; /* Warna teks biru untuk item aktif */
+    background-color: #ebf4ff;
+    /* Latar biru muda untuk item aktif */
+    color: #2b6cb0;
+    /* Warna teks biru untuk item aktif */
     font-weight: 600;
-    border-left-color: #2b6cb0; /* Garis indikator aktif biru */
+    border-left-color: #2b6cb0;
+    /* Garis indikator aktif biru */
 }
 
 .settings-nav .nav-link.active i {
-    color: #2b6cb0; /* Warna ikon biru untuk item aktif */
+    color: #2b6cb0;
+    /* Warna ikon biru untuk item aktif */
 }
 
 .settings-content {
     flex: 1;
-    min-height: 400px; /* Agar konten tidak terlalu pendek */
+    min-height: 400px;
+    /* Agar konten tidak terlalu pendek */
 }
 
 .settings-card {
     background-color: #fff;
-    padding: 2.5rem; /* Padding lebih besar */
+    padding: 2.5rem;
+    /* Padding lebih besar */
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    margin-bottom: 1.5rem; /* Jarak antar card */
+    margin-bottom: 1.5rem;
+    /* Jarak antar card */
 }
 
 .settings-card h3 {
-    font-size: 1.5rem; /* Ukuran judul lebih besar */
-    font-weight: 700; /* Lebih tebal */
-    color: #2d3748; /* Warna judul lebih gelap */
+    font-size: 1.5rem;
+    /* Ukuran judul lebih besar */
+    font-weight: 700;
+    /* Lebih tebal */
+    color: #2d3748;
+    /* Warna judul lebih gelap */
     margin-bottom: 0.5rem;
 }
 
 .settings-card p {
-    color: #718096; /* Warna teks deskripsi */
+    color: #718096;
+    /* Warna teks deskripsi */
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
 }
 
 /* Styling untuk form field */
-.settings-card .input-label { /* Menggunakan kelas dari x-input-label Breeze */
+.settings-card .input-label {
+    /* Menggunakan kelas dari x-input-label Breeze */
     font-weight: 600;
     color: #2d3748;
     margin-bottom: 0.5rem;
     display: block;
 }
 
-.settings-card .text-input { /* Menggunakan kelas dari x-text-input Breeze */
+.settings-card .text-input {
+    /* Menggunakan kelas dari x-text-input Breeze */
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #e2e8f0;
@@ -232,18 +299,23 @@ body {
 }
 
 .current-avatar {
-    width: 80px; /* Ukuran avatar lebih besar */
+    width: 80px;
+    /* Ukuran avatar lebih besar */
     height: 80px;
-    background-color: #667eea; /* Warna avatar default (biru-ungu) */
+    background-color: #667eea;
+    /* Warna avatar default (biru-ungu) */
     border-radius: 9999px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 2rem; /* Ukuran inisial lebih besar */
+    font-size: 2rem;
+    /* Ukuran inisial lebih besar */
     font-weight: 600;
-    flex-shrink: 0; /* Pastikan tidak menyusut */
-    overflow: hidden; /* Untuk gambar profil */
+    flex-shrink: 0;
+    /* Pastikan tidak menyusut */
+    overflow: hidden;
+    /* Untuk gambar profil */
 }
 
 .current-avatar img {
@@ -258,7 +330,8 @@ body {
     gap: 0.5rem;
 }
 
-.avatar-actions button { /* Untuk tombol ganti/hapus foto */
+.avatar-actions button {
+    /* Untuk tombol ganti/hapus foto */
     background: none;
     border: none;
     color: #2b6cb0;
@@ -267,6 +340,7 @@ body {
     padding: 0;
     text-align: left;
 }
+
 .avatar-actions button:hover {
     text-decoration: underline;
 }
@@ -280,20 +354,26 @@ body {
 
 /* Tombol Simpan */
 .btn-simpan-modern {
-    background-color: #3182ce; /* Warna biru */
+    background-color: #3182ce;
+    /* Warna biru */
     color: white;
-    padding: 0.8rem 1.8rem; /* Padding lebih besar */
+    padding: 0.8rem 1.8rem;
+    /* Padding lebih besar */
     border: none;
-    border-radius: 0.5rem; /* Sudut lebih melengkung */
+    border-radius: 0.5rem;
+    /* Sudut lebih melengkung */
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-    float: right; /* Pindahkan ke kanan */
-    margin-top: 1.5rem; /* Jarak dari form */
+    float: right;
+    /* Pindahkan ke kanan */
+    margin-top: 1.5rem;
+    /* Jarak dari form */
 }
 
 .btn-simpan-modern:hover {
-    background-color: #2c5282; /* Warna biru lebih gelap saat hover */
+    background-color: #2c5282;
+    /* Warna biru lebih gelap saat hover */
 }
 
 /* Tombol Reset (jika ada) */
@@ -307,6 +387,7 @@ body {
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
 }
+
 .btn-reset-modern:hover {
     background-color: #f7fafc;
     color: #2d3748;
@@ -321,6 +402,7 @@ body {
     margin-bottom: 1.5rem;
     border-radius: 0.5rem;
 }
+
 .alert-error {
     background-color: #f8d7da;
     color: #721c24;
@@ -335,30 +417,38 @@ body {
     .settings-container {
         flex-direction: column;
     }
+
     .settings-nav {
         flex: none;
         width: 100%;
         margin-bottom: 1.5rem;
     }
+
     .settings-nav ul {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;
         gap: 0.5rem;
     }
+
     .settings-nav .nav-item {
         flex: 1 1 auto;
         min-width: 120px;
     }
+
     .settings-nav .nav-link {
         justify-content: center;
         text-align: center;
         padding: 0.75rem 1rem;
     }
+
     .settings-nav .nav-link span {
-        display: none; /* Sembunyikan teks di mobile, hanya tampilkan ikon */
+        display: none;
+        /* Sembunyikan teks di mobile, hanya tampilkan ikon */
     }
+
     .settings-nav .nav-link.active span {
-        display: block; /* Tampilkan teks aktif */
+        display: block;
+        /* Tampilkan teks aktif */
     }
 }
