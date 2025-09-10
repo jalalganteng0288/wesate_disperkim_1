@@ -13,7 +13,9 @@ use App\Http\Controllers\Admin\HousingUnitPageController;
 use App\Http\Controllers\Admin\AnnouncementPageController;
 use App\Http\Controllers\Admin\MediaPageController;
 use App\Http\Controllers\Admin\MapController;
-use App\Http\Controllers\Admin\WorkOrderPageController; // <-- Tambahkan ini
+use App\Http\Controllers\Admin\WorkOrderPageController;
+use App\Http\Controllers\Admin\SettingPageController; // Tambahkan ini di bagian atas
+// <-- Tambahkan ini
 
 
 /*
@@ -71,6 +73,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('reports/complaints/pdf', [App\Http\Controllers\Admin\ReportController::class, 'exportComplaintsPDF'])->name('reports.complaints.pdf');
     Route::get('reports/complaints/csv', [App\Http\Controllers\Admin\ReportController::class, 'exportComplaintsCSV'])->name('reports.complaints.csv');
     Route::post('penugasan/{penugasan}/notify', [WorkOrderPageController::class, 'sendNotification'])->name('penugasan.notify');
+    Route::get('pengaturan', [SettingPageController::class, 'index'])->name('pengaturan.index');
+    Route::patch('pengaturan/profile', [SettingPageController::class, 'updateProfile'])->name('pengaturan.updateProfile'); // <-- Rute untuk update profil
+    Route::patch('pengaturan/password', [SettingPageController::class, 'updatePassword'])->name('pengaturan.updatePassword'); // <-- Rute untuk update password
+    Route::delete('pengaturan/profile-photo', [SettingPageController::class, 'deleteProfilePhoto'])->name('pengaturan.deleteProfilePhoto');
+    Route::patch('pengaturan/umum', [SettingPageController::class, 'updateGeneral'])->name('pengaturan.updateGeneral');
+    Route::delete('pengaturan/app-logo', [SettingPageController::class, 'deleteAppLogo'])->name('pengaturan.deleteAppLogo');
+    Route::patch('pengaturan/notifikasi', [SettingPageController::class, 'updateNotifications'])->name('pengaturan.updateNotifications');
+    Route::patch('pengaturan/tampilan', [SettingPageController::class, 'updateAppearance'])->name('pengaturan.updateAppearance');
 });
 // =====================================================================
 

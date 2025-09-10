@@ -54,5 +54,10 @@
                 Penugasan (Work Order)
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}" href="{{ route('admin.pengaturan.index') }}">
+                Pengaturan
+            </a>
+        </li>
     </ul>
 </aside>
