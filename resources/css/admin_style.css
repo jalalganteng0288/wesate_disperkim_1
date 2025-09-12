@@ -71,36 +71,48 @@ body {
 /* ======================================= */
 
 .sidebar .nav-link {
-    color: #334155;
-    /* Warna teks abu-abu gelap agar lebih mudah dibaca */
+    display: flex;
+    align-items: center;
     font-weight: 500;
-    /* Sedikit lebih tebal */
     padding: 0.75rem 1.5rem;
     margin-bottom: 0.25rem;
-    /* Memberi sedikit jarak antar menu */
     border-left: 3px solid transparent;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
-/* Style saat kursor mouse di atas menu (hover) */
+/* 1. Mengatur warna ikon dan teks saat TIDAK AKTIF (INI PERBAIKANNYA) */
+.sidebar .nav-link i,
+.sidebar .nav-link span {
+    color: #4b5563;
+    /* Warna abu-abu gelap yang lebih jelas */
+    transition: color 0.2s;
+}
+
+/* 2. Mengatur warna saat kursor di atas (hover) */
 .sidebar .nav-link:hover {
     background-color: #f1f5f9;
-    /* Latar abu-abu sangat terang */
-    color: #0f172a;
-    /* Warna teks hitam saat hover */
+    /* Latar abu-abu terang */
     border-left-color: #94a3b8;
 }
 
-/* Style untuk menu yang sedang aktif */
+.sidebar .nav-link:hover i,
+.sidebar .nav-link:hover span {
+    color: #111827;
+    /* Warna teks jadi hitam saat di-hover */
+}
+
+/* 3. Mengatur warna saat menu AKTIF */
 .sidebar .nav-link.active {
     background-color: #e0e7ff;
     /* Latar biru muda */
-    color: #3730a3;
-    /* Warna teks biru tua */
     font-weight: 600;
-    /* Lebih tebal untuk menu aktif */
     border-left-color: #4f46e5;
-    /* Garis indikator biru */
+}
+
+.sidebar .nav-link.active i,
+.sidebar .nav-link.active span {
+    color: #4338ca;
+    /* Warna biru tua yang solid */
 }
 
 /* ==================
@@ -451,4 +463,220 @@ body {
         display: block;
         /* Tampilkan teks aktif */
     }
+
+    .sidebar .nav-link {
+        display: flex;
+        align-items: center;
+    }
+
+    /* ... (kode CSS yang sudah ada) ... */
+
+    /* ======================================= */
+    /* === STYLE BARU UNTUK DASHBOARD MODERN === */
+    /* ======================================= */
+
+    /* Kartu KPI (Key Performance Indicator) Versi 2 */
+    .kpi-card-v2 {
+        background-color: white;
+        border-radius: 0.75rem;
+        /* 12px */
+        padding: 1.5rem;
+        /* 24px */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid #e5e7eb;
+        /* border-gray-200 */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .kpi-icon {
+        width: 3.5rem;
+        /* 56px */
+        height: 3.5rem;
+        /* 56px */
+        border-radius: 9999px;
+        /* rounded-full */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        /* 24px */
+    }
+
+    /* Aktivitas Terbaru */
+    .activity-feed {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        /* 16px */
+    }
+
+    .activity-icon {
+        width: 2.25rem;
+        /* 36px */
+        height: 2.25rem;
+        /* 36px */
+        border-radius: 9999px;
+        /* rounded-full */
+        background-color: #eef2ff;
+        /* bg-indigo-100 */
+        color: #6366f1;
+        /* text-indigo-500 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .activity-content {
+        flex: 1;
+    }
+
+    .activity-content p {
+        margin-bottom: 0;
+        line-height: 1.4;
+    }
+}
+
+/* ================================== */
+/* === STYLE UNTUK TOPBAR BARU === */
+/* ================================== */
+.topbar {
+    background-color: #fff;
+    height: 64px;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.topbar-left,
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.search-bar {
+    position: relative;
+    width: 300px;
+}
+
+.search-bar i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+}
+
+/* Notifikasi */
+.notification-wrapper {
+    position: relative;
+}
+
+.notification-btn {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-dropdown {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    width: 360px;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.dropdown-header {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-body {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    display: flex;
+    padding: 1rem;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.notification-item:hover {
+    background-color: #f9fafb;
+}
+
+.item-icon {
+    font-size: 1.25rem;
+}
+
+.item-content p {
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+.dropdown-footer {
+    padding: 0.75rem;
+    text-align: center;
+    border-top: 1px solid #e5e7eb;
+}
+
+.dropdown-footer a {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #3b82f6;
 }

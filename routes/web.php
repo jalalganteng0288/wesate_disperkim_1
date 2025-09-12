@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\MediaPageController;
 use App\Http\Controllers\Admin\MapController;
 use App\Http\Controllers\Admin\WorkOrderPageController;
 use App\Http\Controllers\Admin\SettingPageController; // Tambahkan ini di bagian atas
+use App\Http\Controllers\Admin\NotificationController; // <-- INI PERBAIKANNYA
 // <-- Tambahkan ini
 
 
@@ -81,6 +82,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::delete('pengaturan/app-logo', [SettingPageController::class, 'deleteAppLogo'])->name('pengaturan.deleteAppLogo');
     Route::patch('pengaturan/notifikasi', [SettingPageController::class, 'updateNotifications'])->name('pengaturan.updateNotifications');
     Route::patch('pengaturan/tampilan', [SettingPageController::class, 'updateAppearance'])->name('pengaturan.updateAppearance');
+    Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 });
 // =====================================================================
 

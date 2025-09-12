@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Setting;  // <-- Tambahkan ini
+use App\Models\Setting;
 
 class SettingPageController extends Controller
 {
@@ -18,11 +18,51 @@ class SettingPageController extends Controller
     public function index()
     {
         $user = Auth::user();
-        // Ambil semua settings dari database dan ubah menjadi array [key => value]
         $settings = Setting::pluck('value', 'key')->all();
 
         return view('admin.pengaturan.index', compact('user', 'settings'));
     }
+
+    // ========================================================================
+    // === FUNGSI BARU DITAMBAHKAN DI SINI UNTUK MEMPERBAIKI ERROR ===
+    // ========================================================================
+    public function updateGeneral(Request $request)
+    {
+        $validatedData = $request->validate([
+            'app_name' => 'required|string|max:255',
+            'app_description' => 'nullable|string',
+            'app_logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,svg', 'max:2048'],
+        ]);
+
+        // Simpan nama aplikasi
+        Setting::updateOrCreate(
+            ['key' => 'app_name'],
+            ['value' => $validatedData['app_name']]
+        );
+
+        // Simpan deskripsi aplikasi
+        Setting::updateOrCreate(
+            ['key' => 'app_description'],
+            ['value' => $validatedData['app_description']]
+        );
+
+        // Handle upload logo
+        if ($request->hasFile('app_logo')) {
+            // Hapus logo lama jika ada
+            $oldLogoPath = Setting::get('app_logo');
+            if ($oldLogoPath && Storage::disk('public')->exists($oldLogoPath)) {
+                Storage::disk('public')->delete($oldLogoPath);
+            }
+
+            // Simpan logo baru
+            $path = $request->file('app_logo')->store('logos', 'public');
+            Setting::updateOrCreate(['key' => 'app_logo'], ['value' => $path]);
+        }
+
+        return back()->with('status', 'pengaturan-umum-diperbarui');
+    }
+    // ========================================================================
+
 
     /**
      * Memperbarui informasi profil pengguna.
@@ -34,25 +74,20 @@ class SettingPageController extends Controller
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'profile_photo' => ['nullable', 'image', 'max:2048', 'mimes:jpeg,png,jpg,gif,svg'], // Validasi untuk foto
+            'profile_photo' => ['nullable', 'image', 'max:2048', 'mimes:jpeg,png,jpg,gif,svg'],
         ]);
 
-        // Handle Photo Upload
         if ($request->hasFile('profile_photo')) {
-            // Hapus foto lama jika ada
             if ($user->profile_photo_path && Storage::disk('public')->exists($user->profile_photo_path)) {
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
-
-            // Simpan foto baru
             $path = $request->file('profile_photo')->store('profile-photos', 'public');
             $user->profile_photo_path = $path;
         }
 
-        // Update data profil lainnya
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
-        $user->save(); // Menggunakan save() karena kita mengupdate satu per satu
+        $user->save();
 
         return back()->with('status', 'profil-diperbarui');
     }
@@ -89,36 +124,39 @@ class SettingPageController extends Controller
 
         return back()->with('status', 'foto-profil-dihapus');
     }
+
+    /**
+     * Menghapus logo aplikasi.
+     */
     public function deleteAppLogo(Request $request)
     {
         $logoSetting = Setting::where('key', 'app_logo')->first();
 
         if ($logoSetting) {
-            // Hapus file dari storage
             if ($logoSetting->value && Storage::disk('public')->exists($logoSetting->value)) {
                 Storage::disk('public')->delete($logoSetting->value);
             }
-            // Hapus record dari database
             $logoSetting->delete();
         }
 
         return back()->with('status', 'logo-dihapus');
     }
+
+    /**
+     * Memperbarui pengaturan notifikasi.
+     */
     public function updateNotifications(Request $request)
     {
-        // Validasi data (opsional, tapi disarankan)
         $request->validate([
             'notifications_email' => 'nullable|string',
             'notifications_push' => 'nullable|string',
         ]);
 
-        // Simpan pengaturan notifikasi email
         Setting::updateOrCreate(
             ['key' => 'notifications_email'],
             ['value' => $request->has('notifications_email') ? '1' : '0']
         );
 
-        // Simpan pengaturan notifikasi push
         Setting::updateOrCreate(
             ['key' => 'notifications_push'],
             ['value' => $request->has('notifications_push') ? '1' : '0']
@@ -132,12 +170,10 @@ class SettingPageController extends Controller
      */
     public function updateAppearance(Request $request)
     {
-        // Validasi data
         $request->validate([
             'theme_mode' => 'required|string|in:light,dark',
         ]);
 
-        // Simpan pengaturan tema
         Setting::updateOrCreate(
             ['key' => 'theme_mode'],
             ['value' => $request->theme_mode]

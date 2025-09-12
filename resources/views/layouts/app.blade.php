@@ -2,70 +2,78 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="utf-g">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Bootstrap CSS (jika Anda masih menggunakannya di beberapa tempat) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- === [UNTUK PETA] Leaflet CSS === -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.css" />
-
-    <!-- Scripts & Styles bawaan Laravel (Vite) -->
-    {{-- Vite akan otomatis memasukkan app.css dan admin_style.css jika diimpor di app.js --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Slot untuk CSS tambahan per halaman -->
-    @stack('styles')
+    {{-- My Custom CSS --}}
+    <link rel="stylesheet" href="{{ asset('css/admin_style.css') }}">
+
+    {{-- Font Awesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- Leaflet CSS for Maps --}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 </head>
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+<body class="font-sans antialiased bg-gray-100">
+    <div class="d-flex" style="min-height: 100vh;">
+        @include('layouts.sidebar')
 
-        <div class="d-flex">
-            @include('layouts.sidebar')
+        <div class="flex-grow-1">
+            @include('layouts.topbar')
 
-            <main class="main-content flex-grow-1">
-                <!-- Page Heading -->
-                @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-                @endif
-
-                <!-- Page Content -->
+            <main>
                 {{ $slot }}
             </main>
         </div>
-
     </div>
 
-    <!-- === [UNTUK PETA] Leaflet JS === -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-    <!-- === [UNTUK GRAFIK] Chart.js === -->
+    {{-- Chart.js --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- === [UNTUK EDITOR] TinyMCE (jika tidak dimuat per halaman) === -->
-    {{-- <script src="https://cdn.tiny.cloud/1/xfo1mgzbpdozo1ofx8w550fcyv3s2q5d4wwn23igp4fuszse/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> --}}
+    {{-- Leaflet JS for Maps --}}
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.umd.js"></script>
 
-    <!-- Slot untuk JS tambahan per halaman -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cek jika ada elemen notifikasi sebelum menjalankan script
+            const notificationItems = document.querySelectorAll('.notification-item');
+            if (notificationItems.length > 0) {
+                notificationItems.forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault(); // Mencegah link langsung pindah halaman
+
+                        const notificationId = this.dataset.id;
+                        const targetUrl = this.href;
+
+                        // Kirim request untuk menandai sudah dibaca
+                        axios.post(`/admin/notifications/${notificationId}/read`, {
+                                _token: '{{ csrf_token() }}'
+                            })
+                            .then(response => {
+                                console.log('Notifikasi ditandai sudah dibaca');
+                                // Setelah berhasil, lanjutkan ke halaman tujuan
+                                window.location.href = targetUrl;
+                            })
+                            .catch(error => {
+                                console.error('Gagal menandai notifikasi', error);
+                                // Jika gagal, tetap lanjutkan ke halaman tujuan agar user tidak bingung
+                                window.location.href = targetUrl;
+                            });
+                    });
+                });
+            }
+        });
+    </script>
+
+    {{-- Ini adalah tempat untuk script dari halaman lain (seperti dashboard.blade.php) --}}
     @stack('scripts')
 </body>
 

@@ -3,48 +3,58 @@
 namespace App\Observers;
 
 use App\Models\AuditLog;
-use App\Models\Complaint;
+use App\Models\Pengaduan;
+use App\Models\User;
+use App\Notifications\NewComplaintNotification;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Auth; // <-- Tambahkan ini
 
 class ComplaintObserver
 {
     /**
-     * Handle the Complaint "created" event.
+     * Handle the Pengaduan "created" event.
      */
-    public function created(Complaint $complaint): void
+    public function created(Pengaduan $pengaduan): void
     {
         AuditLog::create([
-            'actor_id' => 1, // Nanti diganti dengan auth()->id()
+            'actor_id' => Auth::id(), // Menggunakan Auth::id() yang lebih aman
             'action' => 'complaint.created',
-            'resource_type' => 'Complaint',
-            'resource_id' => $complaint->id,
-            'changes' => $complaint->toJson(), // Simpan seluruh data baru sebagai JSON
+            'resource_type' => 'Pengaduan',
+            'resource_id' => $pengaduan->id,
+            'changes' => $pengaduan->toJson(),
         ]);
+
+        $adminsAndOperators = User::role(['Super Admin', 'Operator'])->get();
+
+        if ($adminsAndOperators->isNotEmpty()) {
+            Notification::send($adminsAndOperators, new NewComplaintNotification($pengaduan));
+        }
     }
 
     /**
-     * Handle the Complaint "updated" event.
+     * Handle the Pengaduan "updated" event.
      */
-    public function updated(Complaint $complaint): void
+    public function updated(Pengaduan $pengaduan): void
     {
         AuditLog::create([
-            'actor_id' => 1, // Nanti diganti dengan auth()->id()
+            'actor_id' => Auth::id(),
             'action' => 'complaint.updated',
-            'resource_type' => 'Complaint',
-            'resource_id' => $complaint->id,
-            'changes' => json_encode($complaint->getChanges()), // Hanya simpan kolom yang berubah
+            'resource_type' => 'Pengaduan',
+            'resource_id' => $pengaduan->id,
+            'changes' => json_encode($pengaduan->getChanges()),
         ]);
     }
 
     /**
-     * Handle the Complaint "deleted" event.
+     * Handle the Pengaduan "deleted" event.
      */
-    public function deleted(Complaint $complaint): void
+    public function deleted(Pengaduan $pengaduan): void
     {
         AuditLog::create([
-            'actor_id' => 1, // Nanti diganti dengan auth()->id()
+            'actor_id' => Auth::id(),
             'action' => 'complaint.deleted',
-            'resource_type' => 'Complaint',
-            'resource_id' => $complaint->id,
+            'resource_type' => 'Pengaduan',
+            'resource_id' => $pengaduan->id,
         ]);
     }
 }
