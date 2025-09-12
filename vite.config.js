@@ -1,3 +1,5 @@
+// vite.config.js
+
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import react from '@vitejs/plugin-react';
@@ -8,7 +10,7 @@ export default defineConfig({
             // UBAH BAGIAN INI DARI STRING MENJADI ARRAY
             input: [
                 'resources/css/app.css', 
-                'resources/js/app.jsx'
+                'resources/js/app.js'
             ],
             refresh: true,
         }),
