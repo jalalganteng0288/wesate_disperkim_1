@@ -33,6 +33,12 @@ body {
     border-right: 1px solid var(--border-color);
 }
 
+.flex-grow-1 {
+    width: calc(100% - 250px);
+    margin-left: 250px;
+    /* <- INI KUNCINYA */
+}
+
 .sidebar h4,
 .sidebar-header {
     color: var(--text-light);
@@ -84,10 +90,16 @@ body {
 
 
 /* ==================
-   KONTEN UTAMA
-   ================== */
+   KONTEN UTAMA (SUDAH DIPERBAIKI)
+   ================== */
 .main-content {
-    width: 100%;
+    /* (1) Dorong konten ke kanan selebar sidebar */
+
+    /* (2) Atur lebarnya agar pas dengan sisa ruang */
+    /* Bukan 100% lagi, tapi 100% DIKURANGI lebar sidebar.
+       Ini akan menghilangkan scroll horizontal Anda.
+    */
+
     padding: 2rem;
 }
 
@@ -411,7 +423,7 @@ body {
 
 
 /* ================================== */
-/* === STYLE UNTUK TOPBAR BARU === */
+/* === STYLE UNTUK TOPBAR BARU (SUDAH DIPERBAIKI) === */
 /* ================================== */
 .topbar {
     background-color: #fff;
@@ -424,6 +436,11 @@ body {
     position: sticky;
     top: 0;
     z-index: 999;
+
+    /* === TAMBAHKAN DUA BARIS INI === */
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    /* ================================= */
 }
 
 .topbar-left,
