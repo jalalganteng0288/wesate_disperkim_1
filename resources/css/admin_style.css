@@ -24,10 +24,14 @@ body {
 /* === STYLING SIDEBAR (SUDAH DIPERBAIKI) === */
 /* ======================================= */
 .sidebar {
-    width: 250px;
+    width: 280px;
+    /* Samakan dengan inline style di blade */
     height: 100vh;
-    position: sticky;
+    position: fixed;
+    /* <-- GANTI DARI STICKY */
     top: 0;
+    left: 0;
+    /* <-- TAMBAHKAN INI */
     z-index: 1000;
     background-color: var(--primary-blue);
     border-right: 1px solid var(--border-color);

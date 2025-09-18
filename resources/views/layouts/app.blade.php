@@ -1,50 +1,39 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title @if(isset($page)) inertia @endif>{{ config('app.name', 'Laravel') }}</title>
+    <title @if(isset($page)) inertia @endif>{{ config('app.name', 'Laravel') }}</title>
 
-  {{-- Muat CSS utama untuk SEMUA halaman (Blade & Inertia) --}}
-  @vite(['resources/css/app.css'])
+    @viteReactRefresh
+    @vite(['resources/css/app.css', 'resources/js/app.jsx'])
 
-  {{-- HANYA muat aset Inertia/React JIKA ini halaman Inertia --}}
-  @if (isset($page))
-  @viteReactRefresh
-  @vite(['resources/js/app.jsx'])
-  @inertiaHead
-  @endif
+    @if (isset($page))
+        @inertiaHead
+    @endif
 
-  {{-- lainnya --}}
-  @stack('styles')
+    @stack('styles')
 </head>
 
-<body class="font-sans antialiased bg-gray-100 overflow-hidden">
+<body class="font-sans antialiased bg-gray-100">
 
-    <div class="d-flex" style="height: 100vh;">
-        
-        @include('layouts.sidebar')
+    @include('layouts.sidebar')
 
-        <div class="flex-grow-1" style="display: flex; flex-direction: column; height: 100vh;">
-            
-            @include('layouts.topbar')
+    <div class="konten-wrapper" style="margin-left: 280px;">
 
-            <div class="flex-grow-1 overflow-y-auto p-6">
-                <main>
-                    {{-- Jika ini adalah page Inertia... --}}
-                    @if (isset($page))
-                        @inertia
-                    @else
-                    {{-- Untuk blade tradisional --}}
+        @include('layouts.topbar')
+
+        <div class="p-6"> <main>
+                @if (isset($page))
+                    @inertia
+                @else
                     {{ $slot ?? '' }}
-                    @endif
-                </main>
-            </div>
-            
+                @endif
+            </main>
         </div>
+        
     </div>
 
     {{-- script eksternal --}}
@@ -74,5 +63,4 @@
 
     @stack('scripts')
 </body>
-
 </html>

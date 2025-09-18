@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Complaint;
+use App\Models\Pengaduan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +16,7 @@ class ComplaintController extends Controller
      */
     public function index()
     {
-        $complaints = Complaint::with('user')->latest()->paginate(10);
+        $complaints = Pengaduan::with('user')->latest()->paginate(10);
 
         return response()->json($complaints);
     }
@@ -46,7 +46,7 @@ class ComplaintController extends Controller
         }
 
         // Buat pengaduan baru
-        $complaint = Complaint::create([
+        $complaint = Pengaduan::create([
             // Untuk sementara, kita hardcode user_id ke 1 (Super Admin).
             // Nanti ini akan diganti dengan ID user yang sedang login.
             'user_id' => 1,
@@ -67,7 +67,7 @@ class ComplaintController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Complaint $complaint)
+    public function show(Pengaduan $complaint)
     {
         // Untuk menampilkan detail satu pengaduan
         return response()->json($complaint->load('user'));
@@ -76,7 +76,7 @@ class ComplaintController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Complaint $complaint)
+    public function update(Request $request, Pengaduan $complaint)
     {
         $validator = Validator::make($request->all(), [
             'title' => ['sometimes', 'required', 'string', 'max:255'],
@@ -117,7 +117,7 @@ class ComplaintController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Complaint $complaint)
+    public function destroy(Pengaduan $complaint)
     {
         if ($complaint->photo_url) {
             Storage::disk('public')->delete($complaint->photo_url);
@@ -127,7 +127,7 @@ class ComplaintController extends Controller
 
         return response()->json(['message' => 'Complaint deleted successfully']); // Kita akan isi ini di langkah berikutnya
     }
-    public function updateStatus(Request $request, Complaint $complaint)
+    public function updateStatus(Request $request, Pengaduan $complaint)
     {
         // 1. Validasi Input Status
         $validator = Validator::make($request->all(), [
@@ -160,7 +160,8 @@ class ComplaintController extends Controller
 
         // 2. Kirim notifikasi jika user-nya ada
         if ($reporter) {
-            $reporter->notify(new ComplaintStatusUpdated($complaint));
+            // Mungkin baris ini yang error
+            $reporter->notify(new ComplaintStatusUpdated($pengaduan));
         }
         // --- AKHIR BAGIAN BARU ---
 
