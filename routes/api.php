@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\UserController;
-use App\Http\Controllers\Api\Admin\ComplaintController;
+use App\Http\Controllers\Api\Admin\PengaduanController;
 use App\Http\Controllers\Api\Admin\NewsController;
 use App\Http\Controllers\Api\Admin\AnnouncementController;
 use App\Http\Controllers\Api\Admin\InfrastructureReportController;
@@ -24,9 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::apiResource('users', UserController::class);
 
-    Route::apiResource('complaints', ComplaintController::class); // <-- Diperbaiki (sebelumnya ada spasi di 'class')
-    Route::patch('complaints/{complaint}/status', [ComplaintController::class, 'updateStatus'])
-        ->name('complaints.updateStatus');
+  Route::apiResource('pengaduan', PengaduanController::class);
+Route::post('pengaduan/{pengaduan}/status', [PengaduanController::class, 'updateStatus']);
 
     Route::apiResource('news', NewsController::class);
     Route::apiResource('announcements', AnnouncementController::class);

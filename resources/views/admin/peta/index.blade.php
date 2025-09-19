@@ -1,181 +1,155 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Peta & Analitik Geospasial') }}
-        </h2>
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <h2 class="font-bold text-2xl text-gray-800 leading-tight">
+                {{ __('Data Kecamatan') }}
+            </h2>
+            <div class="flex items-center gap-2">
+                <a href="#" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
+                    <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                    Export Data
+                </a>
+                <x-primary-button>
+                    <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                    Update Data
+                </x-primary-button>
+            </div>
+        </div>
     </x-slot>
 
-    @push('styles')
-    <style>
-        #map-container {
-            position: relative;
-        }
-        #map { 
-            height: 75vh; 
-            border-radius: 0.5rem;
-        }
-        #map-filter {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.65);
-        }
-        #map-filter h4 {
-            margin-top: 0;
-            margin-bottom: 5px;
-            font-size: 16px;
-        }
-        .filter-group { margin-bottom: 10px; }
-        .filter-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .leaflet-popup-content-wrapper { border-radius: 5px; }
-        .leaflet-popup-content { font-size: 14px; line-height: 1.8; }
-        .popup-title { font-weight: bold; margin-bottom: 5px; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .popup-status { font-style: italic; color: #555; }
-        .share-button {
-            margin-top: 8px; 
-            display: inline-block; 
-            background-color: #4285F4; 
-            color: white !important; 
-            padding: 5px 10px; 
-            border-radius: 3px; 
-            text-decoration: none;
-            font-size: 12px;
-        }
-        .share-button:hover {
-            background-color: #357ae8;
-            color: white !important;
-        }
-    </style>
-    @endpush
+    <div>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900" id="map-container">
-                    <div id="map"></div>
-                    <div id="map-filter">
-                        <h4>Filter Peta</h4>
-                        <div class="filter-group">
-                            <label>Tipe Laporan:</label>
-                            <div><input type="checkbox" id="filter-pengaduan" value="pengaduan" checked> Pengaduan</div>
-                            <div><input type="checkbox" id="filter-infrastruktur" value="infrastruktur" checked> Infrastruktur</div>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <p class="text-gray-600 mb-6">Kelola data perumahan dan demografis setiap kecamatan di Kabupaten Garut.</p>
+
+                {{-- 4 Kartu KPI (DINAMIS) --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+                    <div class="border border-gray-200 rounded-lg p-5 flex items-start justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase">Total Kecamatan</p>
+                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ $totalKecamatan }}</p>
+                            <p class="text-xs text-gray-500 mt-2">Semua kecamatan aktif</p>
                         </div>
-                        <div class="filter-group">
-                            <label>Status:</label>
-                            <div><input type="checkbox" class="status-filter" value="baru,Baru" checked> Baru / Verifikasi</div>
-                            <div><input type="checkbox" class="status-filter" value="pengerjaan,Pengerjaan" checked> Pengerjaan</div>
-                            <div><input type="checkbox" class="status-filter" value="selesai,Selesai" checked> Selesai</div>
-                        </div>
+                        <i data-lucide="map-pin" class="w-7 h-7 text-gray-400"></i>
                     </div>
+
+                    <div class="border border-gray-200 rounded-lg p-5 flex items-start justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase">Total Populasi</p>
+                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($totalPopulasi, 0, ',', '.') }}</p>
+                            <p class="text-xs text-green-600 mt-2">Data Disdukcapil</p>
+                        </div>
+                        <i data-lucide="users" class="w-7 h-7 text-gray-400"></i>
+                    </div>
+
+                    <div class="border border-gray-200 rounded-lg p-5 flex items-start justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase">Total Rumah</p>
+                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($totalRumah, 0, ',', '.') }}</p>
+                            <p class="text-xs text-green-600 mt-2">Data Perkim</p>
+                        </div>
+                        <i data-lucide="home" class="w-7 h-7 text-gray-400"></i>
+                    </div>
+
+                    <div class="border border-gray-200 rounded-lg p-5 flex items-start justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase">Rata-rata Rutilahu</p>
+                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($avgRutilahuPercentage, 2) }}%</p>
+                            <p class="text-xs text-red-600 mt-2">Dari total rumah</p>
+                        </div>
+                        <i data-lucide="alert-triangle" class="w-7 h-7 text-gray-400"></i>
+                    </div>
+
                 </div>
             </div>
+
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="relative w-full max-w-md">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                        <input type="text" placeholder="Cari Kecamatan..." class="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg w-full text-sm">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label for="sort" class="text-sm text-gray-600">Urutkan:</label>
+                        <select id="sort" class="border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="nama-az">Nama A-Z</option>
+                            <option value="nama-za">Nama Z-A</option>
+                            <option value="populasi-terbanyak">Populasi Terbanyak</option>
+                        </select>
+                    </div>
+                </div>
+
+                {{-- Wrapper Kartu Kecamatan (DINAMIS DARI LOOP) --}}
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+                    @forelse ($kecamatans as $kecamatan)
+                        @php
+                            // Hitung persentase
+                            $persentaseRutilahu = ($kecamatan->total_rumah > 0) ? ($kecamatan->total_rutilahu / $kecamatan->total_rumah) * 100 : 0;
+                            $persentasePenyelesaianPengaduan = ($kecamatan->pengaduans_count > 0) ? ($kecamatan->pengaduan_selesai_count / $kecamatan->pengaduans_count) * 100 : 0;
+                            $persentaseRumahBaik = 100 - $persentaseRutilahu;
+                        @endphp
+
+                        <div class="border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-800">{{ $kecamatan->name }}</h3>
+                                    <p class="text-sm text-gray-500">{{ $kecamatan->total_desa }} desa/kelurahan • {{ $kecamatan->luas_wilayah_km2 }} km²</p>
+                                </div>
+                                <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800">{{ $kecamatan->status }}</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
+                                <div class="text-sm"><span class="text-gray-500">Populasi:</span> <strong class="text-gray-800 float-right">{{ number_format($kecamatan->populasi) }}</strong></div>
+                                <div class="text-sm"><span class="text-gray-500">Total Rumah:</span> <strong class="text-gray-800 float-right">{{ number_format($kecamatan->total_rumah) }}</strong></div>
+                                <div class="text-sm"><span class="text-gray-500">Rutilahu:</span> <strong class="text-red-600 float-right">{{ number_format($kecamatan->total_rutilahu) }} ({{ number_format($persentaseRutilahu, 1) }}%)</strong></div>
+                                <div class="text-sm"><span class="text-gray-500">Pengaduan:</span> <strong class="text-gray-800 float-right">{{ $kecamatan->pengaduans_count }} ({{ $kecamatan->pengaduan_selesai_count }} selesai)</strong></div>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-xs font-medium text-gray-600">Tingkat Penyelesaian Pengaduan</span>
+                                        <span class="text-xs font-medium text-gray-600">{{ number_format($persentasePenyelesaianPengaduan, 0) }}%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-1.5"><div class="bg-blue-600 h-1.5 rounded-full" style="width: {{ $persentasePenyelesaianPengaduan }}%"></div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-xs font-medium text-gray-600">Kondisi Rumah Baik</span>
+                                        <span class="text-xs font-medium text-gray-600">{{ number_format($persentaseRumahBaik, 0) }}%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-1.5"><div class="bg-green-500 h-1.5 rounded-full" style="width: {{ $persentaseRumahBaik }}%"></div></div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-400">Update terakhir: {{ $kecamatan->updated_at->format('d/m/Y') }}</span>
+                                <div class="space-x-3">
+                                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-800">Detail</a>
+                                    <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-800">Edit</a>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-gray-500 col-span-2">Data kecamatan belum diisi. Silakan isi data master kecamatan terlebih dahulu.</p>
+                    @endforelse
+
+                </div>
+            </div>
+
         </div>
     </div>
 
     @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Inisialisasi Peta, berpusat di Garut
-            const map = L.map('map').setView([-7.216, 107.900], 13);
-
-            // Layer Peta dari OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-
-            // Fitur Pencarian Lokasi
-            const searchProvider = new GeoSearch.OpenStreetMapProvider();
-            const searchControl = new GeoSearch.GeoSearchControl({
-                provider: searchProvider,
-                style: 'bar',
-                showMarker: true,
-                showPopup: false,
-                autoClose: true,
-                retainZoomLevel: false,
-            });
-            map.addControl(searchControl);
-
-            // Definisikan ikon kustom
-            const icons = {
-                pengaduan: L.icon({
-                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-                    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34],
-                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', shadowSize: [41, 41]
-                }),
-                infrastruktur: L.icon({
-                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
-                    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34],
-                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', shadowSize: [41, 41]
-                })
-            };
-
-            let allMarkers = [];
-            let markersLayer = L.layerGroup().addTo(map);
-
-            // Ambil data lokasi dari endpoint
-            fetch('{{ route("admin.map.locations") }}')
-                .then(response => response.json())
-                .then(data => {
-                    allMarkers = data.map(loc => {
-                        let icon = icons[loc.type] || icons['pengaduan'];
-
-                        // === TAMBAHAN FITUR "BAGIKAN LOKASI" DI SINI ===
-                        let googleMapsUrl = `https://www.google.com/maps?q=${loc.latitude},${loc.longitude}`;
-                        
-                        let popupContent = `
-                            <div class="popup-title">${loc.title}</div>
-                            <div class="popup-status">Status: ${loc.status}</div>
-                            <a href="${loc.url}" target="_blank">Lihat Detail &rarr;</a>
-                            <br>
-                            <a href="${googleMapsUrl}" target="_blank" class="share-button">
-                                Bagikan Lokasi
-                            </a>
-                        `;
-                        // ===============================================
-
-                        const marker = L.marker([loc.latitude, loc.longitude], {icon: icon})
-                                        .bindPopup(popupContent);
-                        
-                        marker.options.reportType = loc.type;
-                        marker.options.reportStatus = loc.status.toLowerCase();
-
-                        return marker;
-                    });
-                    
-                    updateMapMarkers();
-                })
-                .catch(error => console.error('Error fetching locations:', error));
-
-            // Fitur Filter Laporan
-            const typeFilters = ['filter-pengaduan', 'filter-infrastruktur'];
-            const statusFilters = document.querySelectorAll('.status-filter');
-
-            function updateMapMarkers() {
-                markersLayer.clearLayers();
-                
-                const activeTypes = typeFilters.filter(id => document.getElementById(id).checked).map(id => document.getElementById(id).value);
-                const activeStatuses = Array.from(statusFilters).filter(el => el.checked).flatMap(el => el.value.split(',').map(s => s.toLowerCase()));
-
-                allMarkers.forEach(marker => {
-                    const typeMatch = activeTypes.includes(marker.options.reportType);
-                    const statusMatch = activeStatuses.some(status => marker.options.reportStatus.includes(status));
-                    
-                    if (typeMatch && statusMatch) {
-                        marker.addTo(markersLayer);
-                    }
-                });
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
             }
-
-            typeFilters.forEach(id => document.getElementById(id).addEventListener('change', updateMapMarkers));
-            statusFilters.forEach(el => el.addEventListener('change', updateMapMarkers));
         });
     </script>
     @endpush

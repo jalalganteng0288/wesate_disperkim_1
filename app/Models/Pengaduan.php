@@ -41,4 +41,9 @@ class Pengaduan extends Model
     {
         return $this->belongsTo(HousingUnit::class);
     }
+
+    public function kecamatan()
+    {
+        return $this->belongsTo(Kecamatan::class);
+    }
 }

@@ -1,73 +1,97 @@
+{{-- Ganti semua isi resources/views/layouts/sidebar.blade.php dengan ini --}}
 <aside class="sidebar bg-light border-end" style="width: 280px; height: 100vh;">
-    <div class="p-4">
-        <h4>Disperkim Garut</h4>
+    <div class="p-4 sidebar-header flex items-center gap-3">
+        {{-- Logo DG (Sudah ada di desain Anda) --}}
+        <div class="bg-blue-600 text-white p-2 rounded-md font-bold text-lg flex items-center justify-center" style="width: 40px; height: 40px;">
+            DG
+        </div>
+        <div>
+            <h4 class="mb-0" style="font-size: 1.1rem; line-height: 1.2;">DISPERKIM GARUT</h4>
+            <span class="text-sm opacity-70">Sistem Informasi</span>
+        </div>
     </div>
-    <ul class="nav flex-column">
+
+    <ul class="nav flex-column px-3 pt-2">
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
-                <i class="fa-solid fa-gauge-high fa-fw me-2"></i>
+                <i data-lucide="layout-grid"></i>
                 <span>Dashboard</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
-                <i class="fa-solid fa-users fa-fw me-2"></i>
-                <span>Manajemen Pengguna</span>
+                <i data-lucide="users"></i>
+                <span>Pengguna</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.pengaduan.*') ? 'active' : '' }}" href="{{ route('admin.pengaduan.index') }}">
-                <i class="fa-solid fa-bullhorn fa-fw me-2"></i>
+                <i data-lucide="bell-ring"></i>
                 <span>Pengaduan</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.infrastruktur.*') ? 'active' : '' }}" href="{{ route('admin.infrastruktur.index') }}">
-                <i class="fa-solid fa-road-bridge fa-fw me-2"></i>
-                <span>Laporan Infrastruktur</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}" href="{{ route('admin.berita.index') }}">
-                <i class="fa-solid fa-newspaper fa-fw me-2"></i>
-                <span>Berita</span>
+                <i data-lucide="building"></i>
+                <span>Infrastruktur</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.perumahan.*') ? 'active' : '' }}" href="{{ route('admin.perumahan.index') }}">
-                <i class="fa-solid fa-house-chimney fa-fw me-2"></i>
-                <span>Master Perumahan</span>
+                <i data-lucide="home"></i>
+                <span>Perumahan</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('admin.pengumuman.*') ? 'active' : '' }}" href="{{ route('admin.pengumuman.index') }}">
-                <i class="fa-solid fa-clipboard-list fa-fw me-2"></i>
-                <span>Pengumuman</span>
+            <a class="nav-link {{ request()->routeIs('admin.kecamatan.*') ? 'active' : '' }}" href="{{ route('admin.kecamatan.index') }}">
+                <i data-lucide="map"></i>
+                <span>Data Kecamatan</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('admin.media.index') ? 'active' : '' }}" href="{{ route('admin.media.index') }}">
-                <i class="fa-solid fa-photo-film fa-fw me-2"></i>
-                <span>Media Library</span>
+            <a class="nav-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}" href="{{ route('admin.berita.index') }}">
+                <i data-lucide="newspaper"></i>
+                <span>Berita</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('admin.map.index') ? 'active' : '' }}" href="{{ route('admin.map.index') }}">
-                <i class="fa-solid fa-map-location-dot fa-fw me-2"></i>
-                <span>Peta & Analitik</span>
-            </a>
-        </li>
-        <li class="nav-item">
+            {{-- Asumsi "Laporan" mengarah ke Penugasan/Work Order --}}
             <a class="nav-link {{ request()->routeIs('admin.penugasan.*') ? 'active' : '' }}" href="{{ route('admin.penugasan.index') }}">
-                <i class="fa-solid fa-list-check fa-fw me-2"></i>
-                <span>Penugasan (Work Order)</span>
+                <i data-lucide="file-text"></i>
+                <span>Laporan</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            {{-- Asumsi "Statistik" mengarah ke Dashboard atau Peta (kita arahkan ke Peta untuk data analitik) --}}
+            <a class="nav-link" href="{{ route('admin.map.index') }}">
+                <i data-lucide="bar-chart-3"></i>
+                <span>Statistik</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}" href="{{ route('admin.pengaturan.index') }}">
-                <i class="fa-solid fa-gear fa-fw me-2"></i>
+                <i data-lucide="settings"></i>
                 <span>Pengaturan</span>
             </a>
         </li>
+        {{-- Item Media Library dihapus (karena tidak ada di gambar target) --}}
     </ul>
+
+    {{-- Tombol Logout di Bawah (sesuai gambar target) --}}
+    <div class="p-4 mt-auto absolute bottom-0 w-full">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-200">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Logout</span>
+            </button>
+        </form>
+    </div>
+
+    {{-- Script untuk menjalankan Lucide --}}
+    @push('scripts')
+    <script>
+        lucide.createIcons();
+    </script>
+    @endpush
 </aside>

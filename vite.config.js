@@ -10,7 +10,8 @@ export default defineConfig({
             // UBAH BAGIAN INI DARI STRING MENJADI ARRAY
             input: [
                 'resources/css/app.css', 
-                'resources/js/app.js'
+                'resources/js/app.jsx', // Ini untuk Inertia/React (login, register)
+                'resources/js/admin.js'  // <-- TAMBAHKAN INI (Untuk Admin Panel Blade)
             ],
             refresh: true,
         }),

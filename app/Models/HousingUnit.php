@@ -24,5 +24,9 @@ class HousingUnit extends Model
     public function complaints(): HasMany
     {
         return $this->hasMany(Complaint::class);
+    }
+    public function kecamatan()
+    {
+        return $this->belongsTo(Kecamatan::class);
     } //
 }

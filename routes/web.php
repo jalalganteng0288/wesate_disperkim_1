@@ -67,8 +67,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::post('media', [MediaPageController::class, 'store'])->name('media.store');
     Route::delete('media/{media}', [MediaPageController::class, 'destroy'])->name('media.destroy');
 
-    Route::get('peta', [MapController::class, 'index'])->name('map.index');
-    Route::get('peta/lokasi', [MapController::class, 'locations'])->name('map.locations');
+    // Route::get('peta', [MapController::class, 'index'])->name('map.index');
+    // Route::get('peta/lokasi', [MapController::class, 'locations'])->name('map.locations');
 
     Route::resource('penugasan', WorkOrderPageController::class);
     Route::get('reports/complaints/pdf', [App\Http\Controllers\Admin\ReportController::class, 'exportComplaintsPDF'])->name('reports.complaints.pdf');
@@ -83,6 +83,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::patch('pengaturan/notifikasi', [SettingPageController::class, 'updateNotifications'])->name('pengaturan.updateNotifications');
     Route::patch('pengaturan/tampilan', [SettingPageController::class, 'updateAppearance'])->name('pengaturan.updateAppearance');
     Route::post('notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::get('kecamatan', [\App\Http\Controllers\Admin\KecamatanController::class, 'index'])->name('kecamatan.index');
+
 });
 // =====================================================================
 

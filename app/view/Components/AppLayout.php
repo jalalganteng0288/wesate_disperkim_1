@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Auth; // <-- Ini perbaikannya
+use Illuminate\Support\Facades\Auth;
 
 class AppLayout extends Component
 {
@@ -13,13 +13,15 @@ class AppLayout extends Component
      */
     public function render(): View
     {
+        /** @var \App\Models\User|null $user */ // <-- TAMBAHKAN HINT INI
         $user = Auth::user();
+        
         $unreadNotifications = $user ? $user->unreadNotifications()->take(5)->get() : collect();
-        $notificationCount = $user ? $user->unreadNotifications()->count() : 0;
+        $notificationCount = $user ? $user->unreadNotifications()->count() : 0; // Seharusnya $notificationCount, bukan $unreadNotificationsCount
 
         return view('layouts.app', [
             'unreadNotifications' => $unreadNotifications,
-            'notificationCount' => $notificationCount,
+            'unreadNotificationsCount' => $notificationCount, // Sesuaikan nama variabel yang dikirim ke Blade
         ]);
     }
 }
