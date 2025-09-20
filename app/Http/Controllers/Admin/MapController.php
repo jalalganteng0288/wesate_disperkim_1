@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http.Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pengaduan; // <-- Kita butuh ini
@@ -52,7 +52,8 @@ class MapController extends Controller
             ->get();
             
         $dataKecamatan = [
-            'labels' => $pengaduanKecamatan->map(fn($item) => $item->kecamatan->name ?? 'Tidak Diketahui'),
+            // PERBAIKAN DI SINI: Tambahkan tanda tanya (?) setelah ->kecamatan
+            'labels' => $pengaduanKecamatan->map(fn($item) => $item->kecamatan?->name ?? 'Tidak Diketahui'),
             'data' => $pengaduanKecamatan->map(fn($item) => $item->total),
         ];
 

@@ -33,7 +33,7 @@ class MediaController extends Controller
             'file_path' => $path,
             'mime_type' => $file->getMimeType(),
             'size' => $file->getSize(),
-            'uploader_id' => 1, // Nanti diganti dengan auth()->id()
+            'uploaded_by' => auth()->id(), // Nanti diganti dengan auth()->id()
         ]);
 
         return response()->json([
