@@ -15,7 +15,8 @@ use App\Http\Controllers\Admin\MediaPageController;
 use App\Http\Controllers\Admin\MapController;
 use App\Http\Controllers\Admin\WorkOrderPageController;
 use App\Http\Controllers\Admin\SettingPageController; // Tambahkan ini di bagian atas
-use App\Http\Controllers\Admin\NotificationController; // <-- INI PERBAIKANNYA
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\KecamatanController; // <-- INI PERBAIKANNYA
 // <-- Tambahkan ini
 
 
@@ -67,8 +68,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::post('media', [MediaPageController::class, 'store'])->name('media.store');
     Route::delete('media/{media}', [MediaPageController::class, 'destroy'])->name('media.destroy');
 
-    // Route::get('peta', [MapController::class, 'index'])->name('map.index');
-    // Route::get('peta/lokasi', [MapController::class, 'locations'])->name('map.locations');
+    Route::get('peta', [MapController::class, 'index'])->name('map.index');
+    Route::get('peta/lokasi', [MapController::class, 'locations'])->name('map.locations');
 
     Route::resource('penugasan', WorkOrderPageController::class);
     Route::get('reports/complaints/pdf', [App\Http\Controllers\Admin\ReportController::class, 'exportComplaintsPDF'])->name('reports.complaints.pdf');

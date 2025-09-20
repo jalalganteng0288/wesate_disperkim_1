@@ -1,155 +1,151 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-            <h2 class="font-bold text-2xl text-gray-800 leading-tight">
-                {{ __('Data Kecamatan') }}
-            </h2>
-            <div class="flex items-center gap-2">
-                <a href="#" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
-                    <i data-lucide="download" class="w-4 h-4 mr-2"></i>
-                    Export Data
-                </a>
-                <x-primary-button>
-                    <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
-                    Update Data
-                </x-primary-button>
-            </div>
-        </div>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Statistik Pengaduan') }}
+        </h2>
     </x-slot>
 
-    <div>
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            
+            {{-- Ini adalah kode untuk membuat TABS (menggunakan Alpine.js) --}}
+            <div x-data="{ tab: 'bulanan' }">
+                
+                {{-- Ini adalah tombol-tombol Tab --}}
+                <div class="mb-4 border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                        <button
+                            @click="tab = 'bulanan'"
+                            :class="tab === 'bulanan' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                            Trend Bulanan
+                        </button>
+                        
+                        <button
+                            @click="tab = 'kecamatan'"
+                            :class="tab === 'kecamatan' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                            Per Kecamatan
+                        </button>
+                        
+                        <button
+                            @click="tab = 'status'"
+                            :class="tab === 'status' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                            Status
+                        </button>
+                    </nav>
+                </div>
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <p class="text-gray-600 mb-6">Kelola data perumahan dan demografis setiap kecamatan di Kabupaten Garut.</p>
-
-                {{-- 4 Kartu KPI (DINAMIS) --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-
-                    <div class="border border-gray-200 rounded-lg p-5 flex items-start justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-500 uppercase">Total Kecamatan</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ $totalKecamatan }}</p>
-                            <p class="text-xs text-gray-500 mt-2">Semua kecamatan aktif</p>
+                {{-- Ini adalah KONTEN / ISI dari setiap Tab --}}
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">
+                        
+                        {{-- Panel 1: Trend Bulanan (hanya tampil jika tab == 'bulanan') --}}
+                        <div x-show="tab === 'bulanan'">
+                            <h3 class="text-lg font-medium mb-4">Trend Pengaduan Bulanan (Tahun {{ date('Y') }})</h3>
+                            <div style="height: 400px;">
+                                <canvas id="chartBulanan"></canvas>
+                            </div>
                         </div>
-                        <i data-lucide="map-pin" class="w-7 h-7 text-gray-400"></i>
-                    </div>
 
-                    <div class="border border-gray-200 rounded-lg p-5 flex items-start justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-500 uppercase">Total Populasi</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($totalPopulasi, 0, ',', '.') }}</p>
-                            <p class="text-xs text-green-600 mt-2">Data Disdukcapil</p>
+                        {{-- Panel 2: Per Kecamatan (hanya tampil jika tab == 'kecamatan') --}}
+                        <div x-show="tab === 'kecamatan'" style="display: none;">
+                            <h3 class="text-lg font-medium mb-4">Jumlah Pengaduan per Kecamatan</h3>
+                            <div style="height: 400px;">
+                                <canvas id="chartKecamatan"></canvas>
+                            </div>
                         </div>
-                        <i data-lucide="users" class="w-7 h-7 text-gray-400"></i>
-                    </div>
 
-                    <div class="border border-gray-200 rounded-lg p-5 flex items-start justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-500 uppercase">Total Rumah</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($totalRumah, 0, ',', '.') }}</p>
-                            <p class="text-xs text-green-600 mt-2">Data Perkim</p>
+                        {{-- Panel 3: Status (hanya tampil jika tab == 'status') --}}
+                        <div x-show="tab === 'status'" style="display: none;">
+                            <h3 class="text-lg font-medium mb-4">Jumlah Pengaduan Berdasarkan Status</h3>
+                            <div style="height: 400px;">
+                                <canvas id="chartStatus"></canvas>
+                            </div>
                         </div>
-                        <i data-lucide="home" class="w-7 h-7 text-gray-400"></i>
+                        
                     </div>
-
-                    <div class="border border-gray-200 rounded-lg p-5 flex items-start justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-500 uppercase">Rata-rata Rutilahu</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($avgRutilahuPercentage, 2) }}%</p>
-                            <p class="text-xs text-red-600 mt-2">Dari total rumah</p>
-                        </div>
-                        <i data-lucide="alert-triangle" class="w-7 h-7 text-gray-400"></i>
-                    </div>
-
                 </div>
             </div>
-
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <div class="relative w-full max-w-md">
-                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                        <input type="text" placeholder="Cari Kecamatan..." class="pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg w-full text-sm">
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <label for="sort" class="text-sm text-gray-600">Urutkan:</label>
-                        <select id="sort" class="border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500">
-                            <option value="nama-az">Nama A-Z</option>
-                            <option value="nama-za">Nama Z-A</option>
-                            <option value="populasi-terbanyak">Populasi Terbanyak</option>
-                        </select>
-                    </div>
-                </div>
-
-                {{-- Wrapper Kartu Kecamatan (DINAMIS DARI LOOP) --}}
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-
-                    @forelse ($kecamatans as $kecamatan)
-                        @php
-                            // Hitung persentase
-                            $persentaseRutilahu = ($kecamatan->total_rumah > 0) ? ($kecamatan->total_rutilahu / $kecamatan->total_rumah) * 100 : 0;
-                            $persentasePenyelesaianPengaduan = ($kecamatan->pengaduans_count > 0) ? ($kecamatan->pengaduan_selesai_count / $kecamatan->pengaduans_count) * 100 : 0;
-                            $persentaseRumahBaik = 100 - $persentaseRutilahu;
-                        @endphp
-
-                        <div class="border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-800">{{ $kecamatan->name }}</h3>
-                                    <p class="text-sm text-gray-500">{{ $kecamatan->total_desa }} desa/kelurahan • {{ $kecamatan->luas_wilayah_km2 }} km²</p>
-                                </div>
-                                <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800">{{ $kecamatan->status }}</span>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
-                                <div class="text-sm"><span class="text-gray-500">Populasi:</span> <strong class="text-gray-800 float-right">{{ number_format($kecamatan->populasi) }}</strong></div>
-                                <div class="text-sm"><span class="text-gray-500">Total Rumah:</span> <strong class="text-gray-800 float-right">{{ number_format($kecamatan->total_rumah) }}</strong></div>
-                                <div class="text-sm"><span class="text-gray-500">Rutilahu:</span> <strong class="text-red-600 float-right">{{ number_format($kecamatan->total_rutilahu) }} ({{ number_format($persentaseRutilahu, 1) }}%)</strong></div>
-                                <div class="text-sm"><span class="text-gray-500">Pengaduan:</span> <strong class="text-gray-800 float-right">{{ $kecamatan->pengaduans_count }} ({{ $kecamatan->pengaduan_selesai_count }} selesai)</strong></div>
-                            </div>
-
-                            <div class="space-y-3">
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-xs font-medium text-gray-600">Tingkat Penyelesaian Pengaduan</span>
-                                        <span class="text-xs font-medium text-gray-600">{{ number_format($persentasePenyelesaianPengaduan, 0) }}%</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-1.5"><div class="bg-blue-600 h-1.5 rounded-full" style="width: {{ $persentasePenyelesaianPengaduan }}%"></div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span class="text-xs font-medium text-gray-600">Kondisi Rumah Baik</span>
-                                        <span class="text-xs font-medium text-gray-600">{{ number_format($persentaseRumahBaik, 0) }}%</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-1.5"><div class="bg-green-500 h-1.5 rounded-full" style="width: {{ $persentaseRumahBaik }}%"></div></div>
-                                </div>
-                            </div>
-
-                            <hr class="my-4">
-                            <div class="flex justify-between items-center">
-                                <span class="text-xs text-gray-400">Update terakhir: {{ $kecamatan->updated_at->format('d/m/Y') }}</span>
-                                <div class="space-x-3">
-                                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-800">Detail</a>
-                                    <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-800">Edit</a>
-                                </div>
-                            </div>
-                        </div>
-                    @empty
-                        <p class="text-gray-500 col-span-2">Data kecamatan belum diisi. Silakan isi data master kecamatan terlebih dahulu.</p>
-                    @endforelse
-
-                </div>
-            </div>
-
+            
         </div>
     </div>
 
+    {{-- Ini adalah kode JAVASCRIPT untuk menggambar GRAFIK --}}
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
+            // Kita ambil data yang sudah disiapkan Controller
+             const dataBulanan = JSON.parse('@json($dataBulanan)');
+            const dataKecamatan = JSON.parse('@json($dataKecamatan)');
+            const dataStatus = JSON.parse('@json($dataStatus)');
+            // 1. Gambar Grafik Trend Bulanan
+            const ctxBulanan = document.getElementById('chartBulanan').getContext('2d');
+            new Chart(ctxBulanan, {
+                type: 'bar',
+                data: {
+                    labels: dataBulanan.labels,
+                    datasets: [{
+                        label: 'Jumlah Pengaduan',
+                        data: dataBulanan.data,
+                        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // 2. Gambar Grafik Per Kecamatan
+            const ctxKecamatan = document.getElementById('chartKecamatan').getContext('2d');
+            new Chart(ctxKecamatan, {
+                type: 'bar',
+                data: {
+                    labels: dataKecamatan.labels,
+                    datasets: [{
+                        label: 'Jumlah Pengaduan',
+                        data: dataKecamatan.data,
+                        backgroundColor: 'rgba(16, 185, 129, 0.5)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // 3. Gambar Grafik Status
+            const ctxStatus = document.getElementById('chartStatus').getContext('2d');
+            new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: dataStatus.labels,
+                    datasets: [{
+                        label: 'Jumlah Pengaduan',
+                        data: dataStatus.data,
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.7)', // Biru
+                            'rgba(245, 158, 11, 0.7)', // Kuning
+                            'rgba(16, 185, 129, 0.7)', // Hijau
+                            'rgba(239, 68, 68, 0.7)'  // Merah
+                        ],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
         });
     </script>
     @endpush

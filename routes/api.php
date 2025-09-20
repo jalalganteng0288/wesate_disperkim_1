@@ -24,8 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::apiResource('users', UserController::class);
 
-  Route::apiResource('pengaduan', PengaduanController::class);
-Route::post('pengaduan/{pengaduan}/status', [PengaduanController::class, 'updateStatus']);
+    // Route::apiResource('pengaduan', PengaduanController::class);
+    // Route::post('pengaduan/{pengaduan}/status', [PengaduanController::class, 'updateStatus']);
 
     Route::apiResource('news', NewsController::class);
     Route::apiResource('announcements', AnnouncementController::class);

@@ -11,11 +11,12 @@ class KecamatanController extends Controller
     public function index()
     {
         // 1. Ambil Data KPI Global
+        // 1. Ambil Data KPI Global
         $totalKecamatan = Kecamatan::count();
         $totalPopulasi = Kecamatan::sum('populasi');
         $totalRumah = Kecamatan::sum('total_rumah');
         $totalRutilahu = Kecamatan::sum('total_rutilahu');
-        
+
         // Hitung Rata-rata Rutilahu ( (Total Rutilahu / Total Rumah) * 100 )
         $avgRutilahuPercentage = ($totalRumah > 0) ? ($totalRutilahu / $totalRumah) * 100 : 0;
 
@@ -27,11 +28,11 @@ class KecamatanController extends Controller
                 $query->where('status', 'selesai');
             }
         ])
-        ->orderBy('name', 'asc') // Urutkan A-Z
-        ->get();
+            ->orderBy('name', 'asc') // Urutkan A-Z
+            ->get();
 
 
-        return view('admin.kecamatan.index', compact(
+        return view('admin.kecamatan.index', compact( // Perhatikan ini, akan kita ubah
             'totalKecamatan',
             'totalPopulasi',
             'totalRumah',
