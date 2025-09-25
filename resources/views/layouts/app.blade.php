@@ -30,7 +30,7 @@
     'unreadNotificationsCount' => $unreadNotificationsCount
     ])
     <div class="p-6">
-      <main>
+      <main class="animate-fade-in">
         @if (isset($page))
         @inertia
         @else

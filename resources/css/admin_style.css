@@ -1,4 +1,3 @@
-/* Warna dasar dari tema */
 :root {
     --primary-blue: #2c3e50;
     /* Biru tua untuk sidebar */
@@ -64,7 +63,7 @@ body {
     margin-bottom: 0.25rem;
     /* Memberi sedikit jarak antar menu */
 
-    /* ANIMASI: Transisi untuk semua perubahan properti */
+    /* ANIMASI: Transisi untuk semua perubahan properti (SUDAH BENAR) */
     transition: all 0.2s ease-in-out;
 
     /* Style warna (tetap sama) */
@@ -116,19 +115,10 @@ body {
     transform: translateX(0);
 }
 
-/* ==================
-   KONTEN UTAMA (SUDAH DIPERBAIKI)
-   ================== */
-.main-content {
-    /* (1) Dorong konten ke kanan selebar sidebar */
-
-    /* (2) Atur lebarnya agar pas dengan sisa ruang */
-    /* Bukan 100% lagi, tapi 100% DIKURANGI lebar sidebar.
-       Ini akan menghilangkan scroll horizontal Anda.
-    */
-
-    padding: 2rem;
-}
+/* CATATAN: 
+  Ruleset .main-content yang kosong sudah dihapus dari sini 
+  untuk memperbaiki error linter "emptyRules".
+*/
 
 /* ==================
    CARD & ELEMEN UI
